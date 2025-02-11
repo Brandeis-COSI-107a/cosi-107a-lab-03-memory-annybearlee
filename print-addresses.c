@@ -2,19 +2,28 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 
 int main(int argc, char *argv[]) {
-    // Skip program name (argv[0]) and process each argument
-    for (int i = 1; i < argc; i++) {
-        // Convert string to unsigned long long to handle large numbers
-        unsigned long long num = strtoull(argv[i], NULL, 10);
-        
-        // Mask to 48 bits (in case input is larger)
-        num &= 0xFFFFFFFFFFFFULL;
-        
-        // Print with 0x prefix, uppercase hex, padding to 12 digits
-        printf("0x%012llX\n", num);
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <decimal numbers>\n", argv[0]);
+        return 1;
     }
-    
+
+    for (int i = 1; i < argc; i++) {
+        char *endptr;
+        uint64_t num = strtoull(argv[i], &endptr, 10); // Convert input from decimal
+
+        if (*endptr != '\0') {
+            fprintf(stderr, "Invalid number: %s\n", argv[i]);
+            continue;
+        }
+
+        // Mask to ensure only the lower 48 bits are used
+        uint64_t masked_address = num & 0xFFFFFFFFFFFF;
+
+        printf("0x%012" PRIX64 "\n", masked_address); // Print in uppercase hex (12 chars for 48-bit)
+    }
+
     return 0;
 }
