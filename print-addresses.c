@@ -9,11 +9,11 @@ int main(int argc, char *argv[]) {
         // Convert string to unsigned long long to handle large numbers
         unsigned long long num = strtoull(argv[i], NULL, 10);
         
-        // Mask to 48 bits (in case input is larger)
+        // Mask to 48 bits 
         num &= 0xFFFFFFFFFFFFULL;
         
-        // Print with 0x prefix, uppercase hex, padding to 12 digits
-        printf("0x%012llX\n", num);
+        // 0x prefix for hex format, 012 for 12 characters(48 hexadecimal digits), llx(long long type)
+        printf("0x%012llX\n", num); 
     }
     
     return 0;
